@@ -39,7 +39,7 @@ AS_SCRIPT_FILE="as.sh"
 # Finder
 FINDER="\"Finder"
 # Finder 里的根目录
-FINDER_FOLDER_PREFIX="\"/Users/janner/Documents/test/"
+FINDER_FOLDER_PREFIX="\"/Users/janner/Dropbox/办案/2015"
 
 OFOC="com.omnigroup.OmniFocus2"
 if [ ! -d "$HOME/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Caches/$OFOC" ]; then OFOC=$OFOC.MacAppStore; fi
