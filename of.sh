@@ -35,11 +35,11 @@ LOGGED_TODAY_FILE="$DONE_LOG_FOLDER/LoggedToday.txt"
 LOG_NOW_FILE="$DONE_LOG_FOLDER/JustDone.txt"
 
 # 生成的执行 AS 命令的脚本文件（临时）
-AS_SCRIPT_FILE="as.sh"
+AS_SCRIPT_FILE="$DONE_LOG_FOLDER/as.sh"
 # Finder
 FINDER="\"Finder"
 # Finder 里的根目录
-FINDER_FOLDER_PREFIX="\"/Users/janner/Dropbox/办案/2015"
+FINDER_FOLDER_PREFIX="\"/Users/janner/Dropbox/办案/2015/"
 
 OFOC="com.omnigroup.OmniFocus2"
 if [ ! -d "$HOME/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Caches/$OFOC" ]; then OFOC=$OFOC.MacAppStore; fi
@@ -93,18 +93,17 @@ echo "" > "tmp_pretty.txt"
 cat $LOG_NOW_FILE | awk -v prj_prfx=$PROJECT_PREFIX -v finder=$FINDER -v finder_folder=$FINDER_FOLDER_PREFIX -v as_file=$AS_SCRIPT_FILE '
 BEGIN {FS="\|"; prj=0; str=""}
 {
-    if ($7=="开庭") {print ("tag -s 1待合议 " finder_folder $6 "\"") >> as_file;
-    print ("\n") >> as_file}
-    else if ($7=="合议") {print ("tag -s 2已合议 " finder_folder $6 "\"") >> as_file;
-    print ("\n") >> as_file}
-    else if ($7=="写判决") {print ("tag -s 3待审批 " finder_folder $6 "\"") >> as_file;
-    print ("\n") >> as_file}
-    else if ($7=="审批") {print ("tag -s 4待打印 " finder_folder $6 "\"") >> as_file;
-    print ("\n") >> as_file} 
-    else if ($7=="网上报结") {print ("tag -s 5待退卷 " finder_folder $6 "\"") >> as_file;
-    print ("\n") >> as_file}
-    else if ($7=="出判退卷") {print ("tag -s 6已结案 " finder_folder $6 "\"") >> as_file;
-    print ("\n") >> as_file}
+    if ($7=="开庭") 
+        {
+            system("tag -s 1待合议 " finder_folder $6 "\"");
+            print("tag -s 1待合议 " finder_folder $6 "\"")>> as_file;
+            print ("\n") >> as_file;
+        }
+    else if ($7=="合议") {system ("tag -s 2已合议 " finder_folder $6 "\"")}
+    else if ($7=="写判决") {system ("tag -s 3待审批 " finder_folder $6 "\"")}
+    else if ($7=="审批") {system ("tag -s 4待打印 " finder_folder $6 "\"")} 
+    else if ($7=="网上报结") {system ("tag -s 5待退卷 " finder_folder $6 "\"")}
+    else if ($7=="出判退卷") {system ("tag -s 6已结案 " finder_folder $6 "\"")}
     if (prj!=$6) {prj=$6;
         if (prj!="") {print ("\n" prj_prfx prj "[:](omnifocus:///task/" $2 ")") >> "tmp_pretty.txt" }
         else {print ("\nInbox[:](omnifocus:///task/" $3 ")") >> "tmp_pretty.txt"} 
@@ -117,13 +116,13 @@ cat tmp_pretty.txt
 rm tmp_pretty.txt
 cat $LOG_NOW_FILE >> $LOGGED_TODAY_FILE  # Append the list of logged tasks to avoid duplication
 
-if [ -s $AS_SCRIPT_FILE ]; then
-  echo "as file:"
-  cat $AS_SCRIPT_FILE
-  chmod +x $AS_SCRIPT_FILE
-  sh $AS_SCRIPT_FILE
-  rm $AS_SCRIPT_FILE
-fi
+#if [ -s $AS_SCRIPT_FILE ]; then
+#  echo "as file:"
+#  cat $AS_SCRIPT_FILE
+#  chmod +x $AS_SCRIPT_FILE
+#  sh $AS_SCRIPT_FILE
+#  rm $AS_SCRIPT_FILE
+#fi
 
 # Optional acoustic feedback on completion... Comment the next line out if it's distracting
 afplay /System/Library/Sounds/Pop.aiff
