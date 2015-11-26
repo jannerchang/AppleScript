@@ -93,12 +93,7 @@ echo "" > "tmp_pretty.txt"
 cat $LOG_NOW_FILE | awk -v prj_prfx=$PROJECT_PREFIX -v finder=$FINDER -v finder_folder=$FINDER_FOLDER_PREFIX -v as_file=$AS_SCRIPT_FILE '
 BEGIN {FS="\|"; prj=0; str=""}
 {
-    if ($7=="开庭") 
-        {
-            system("tag -s 1待合议 " finder_folder $6 "\"");
-            print("tag -s 1待合议 " finder_folder $6 "\"")>> as_file;
-            print ("\n") >> as_file;
-        }
+    if ($7=="开庭"){system("tag -s 1待合议 " finder_folder $6 "\"")}
     else if ($7=="合议") {system ("tag -s 2已合议 " finder_folder $6 "\"")}
     else if ($7=="写判决") {system ("tag -s 3待审批 " finder_folder $6 "\"")}
     else if ($7=="审批") {system ("tag -s 4待打印 " finder_folder $6 "\"")} 
